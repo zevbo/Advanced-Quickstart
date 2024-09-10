@@ -115,9 +115,58 @@ You can define an annonymous function like so:
 lambda a, b: a + b
 ```
 
+### Decorators
+
 ## Classes
 
+### Basic syntax
+
+The following is a basic class defintion and usage in Python:
+
+```python
+class A:
+
+    def __init__(self, construction_arg1): # constructor
+        self.construction_arg1 = construction_arg1 # setting field
+
+    def some_method(self, arg1, arg2):
+        return self.construction_arg1 * arg1 + arg2
+
+a = A(10)
+a.some_method(5, 2) # 52
+```
+
+A couple of basic things to note:
+
+- all methods start with a "self" argument (which you can name whatever you want, but is bad style to name anything else). That self is the "object" that's being
+- special methods are generally denoted with `__SOMETHING__`. The constructor is really just a special method
+
+### Overview
+
+At their core, objects in Python are a value that can have arbitrary fields. Take any object `o`, and you can add a field to it with `o.some_random_field = 10`. All of the class definitions and special methods are more or less syntactic sugar around that. Take our example in the "basic syntax" section, and consider the line `a = A(10)`. What's really going on here, is something similar to the following:
+
+```python
+a = object() # basic object with the ability to set fields
+a.__class__ = A
+a.__name__ = "A"
+a.__init__ = lambda *args, **kwargs: A.__init__(a, *args, **kwargs)
+a.some_method = lambda *args, **kwargs: A.some_method(a, *args, **kwargs)
+a.__init__(10)
+```
+
+You can't actually run the code above, because `object()` is weridly immutable to the user, but this is still more or less what is going on under the hood.
+
 ## Iterators
+
+Iterators are a simple abstraction over a "stream" of data. They only have one relevant function: next, which gets the next element in the stream, and throws a `StopIteration` exception if there are no more elements.
+
+## Iterable
+
+An iterable is a val
+
+### For loops
+
+## Exceptions
 
 ## Data Types
 
