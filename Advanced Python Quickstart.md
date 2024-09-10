@@ -117,6 +117,22 @@ lambda a, b: a + b
 
 ### Decorators
 
+Decorators allow you to "transform" functions. You can use one like so:
+
+```python
+
+def double_decorator(function):
+    return lambda x: function(x * 2)
+
+@double_decorator
+def f(x):
+    return x + 4
+
+f(10) # 24
+```
+
+We first define a decorator function, whose argument is a function, and returns a new function. Then we use the `@decorator` syntax before the function so that the function is defined as `decorator(f)` rather than `f`.
+
 ## Classes
 
 ### Basic syntax
@@ -156,15 +172,76 @@ a.__init__(10)
 
 You can't actually run the code above, because `object()` is weridly immutable to the user, but this is still more or less what is going on under the hood.
 
+### Special Methods
+
+There are a number of "sepcial methods" you can define on your class. All that really means is their is some built in function that looks for a method with that name. For example:
+
+```python
+class TwoLists:
+    def __init__(self):
+        self.l1 = []
+        self.l2 = []
+
+    def __len__(self):
+        return len(self.l1) + len(self.l2)
+a = TwoLists()
+len(a) # returns 0
+```
+
+[Here](https://www.pythonlikeyoumeanit.com/Module4_OOP/Special_Methods.html) is a decent list of special methods. For my money, the most important ones are: `__len__, __str__, __repr__, __getitem__, __setitem__`.
+
 ## Iterators
 
-Iterators are a simple abstraction over a "stream" of data. They only have one relevant function: next, which gets the next element in the stream, and throws a `StopIteration` exception if there are no more elements.
+Iterators are a simple abstraction over a "stream" of data. They only have one relevant function: next, which gets the next element in the stream, and throws a `StopIteration` exception if there are no more elements. Note that this means that often iterators are lazy.
 
-## Iterable
+### Iterable
 
-An iterable is a val
+An iterable is an object with `__iter__` method that returns an iterator. All iterators are themselves iterables.
 
 ### For loops
+
+In Python, for loops allow you iterate through an iterable. They are by far the most common type of loop.
+
+```python
+for item in iterable:
+    # do something...
+```
+
+Almost all data structures are iterable.
+
+### Common Iterator Constructs
+
+The most common iterator constructors are: `range`, `reversed`, `enumerate` and `zip`. Here are explanations for all of them:
+
+- `range`: `range(min, max, step)` returns an iterator that will step from `min` to `max` with step sizes the size of `step`. If only 2 arguments are provided, `step` defaults to `1`, and if only one argument is provided, `min` defaults to `0`. It is inclusive of `min` and exclusive of `max`
+- `reversed`: takes in an iterator and returns an iterator that runs through the elements in opposite order
+- `enumerate`: takes in an iterator, and returns an iterator of tuples, where the first element in the tuple is the index of the element in the original iterator, and the second element is the value. For example:
+
+```python
+l = [8, 2, 4]
+for i, el in enumerate(l):
+    print(f"{i = }, {el = }")
+```
+
+Will print: "i = 0, el = 8\ni = 1, el = 2\ni = 3, el = 4\n"
+
+- `zip`: takes in n iterators, and combines them into a single iterator, the ith element of which is a tuple of the ith element of each input. So:
+
+```python
+l1 = [0, 1]
+l2 = [2, 3]
+l3 = [4, 5, 6]
+for t in zip(l1, l2, l3):
+    print(t)
+```
+
+Will print "(0,2,4)\n(1,3,5)". Note that it will keep going until any of the iterators is emptied. If you would like it to throw an exception when the iterators are of different sizes, use the keyword argument `strict=true`.
+
+You can also convert an iterator to a `list` or `set` with the `list()` or `set()` functions:
+
+```python
+a = list(reversed([0, 1, 2])) # [2, 1, 0]
+```
 
 ## Exceptions
 
@@ -183,3 +260,5 @@ An iterable is a val
 ### Threads
 
 ## Numpy
+
+## Dataclasses
