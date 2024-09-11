@@ -62,13 +62,14 @@ In python, functions are first class values. They can be passed around and set l
 ```python
 def b():
     return 0
+def b2():
+    return 1
 def c():
-    print(b)
-b = 10
-c()
+    print(b())
+c() # prints 0
+b = b2
+c() # prints 1
 ```
-
-The call to `c()` will print 10.
 
 ### Arguments
 
@@ -79,6 +80,7 @@ def a(x):
     return x
 a(10) # valid
 a(x=10) # also valid
+a(y=10) # throws exception
 ```
 
 You may add a `*` before an argument to capture all remaining ordered arguments as a list. Any arguments after that `*` must be done as kewyord args. And you can capture all keyword arguments as a dictionary with with `**` (though that is usually lazy)
