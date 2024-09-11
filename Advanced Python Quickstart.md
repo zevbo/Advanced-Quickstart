@@ -4,7 +4,7 @@ Python is an interpreted, dynamically typed (aka: untyped) language. It's streng
 
 ## Data Representation
 
-Because it is untyped, all values in Python are runtime-inspectable.
+All values in Python are runtime-inspectable.
 
 ## Variables
 
@@ -35,16 +35,21 @@ var = 0
 def a():
     var = 1
     def c():
-        global var
+        global var # refers to the var defined with "var = 0"
         var = 2
     c()
     def d():
-        nonlocal var
+        nonlocal var # refers to the var defined with "var = 1"
         var = 3
     d()
     return var
 print(a()) # prints 3
 print(var) # prints 2
+
+new_var = 10
+def bloop():
+    print(new_var) # this fails! Because it's referencing the new_var declared on the next line
+    new_var = 4
 ```
 
 ## Functions
