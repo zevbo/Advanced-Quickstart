@@ -162,7 +162,7 @@ a.some_method(5, 2) # 52
 
 A couple of basic things to note:
 
-- all methods start with a "self" argument (which you can name whatever you want, but is bad style to name anything else). That self is the "object" that's being
+- all methods start with a "self" argument (which you can name whatever you want, but is bad style to name anything else). That self is the "object" that's being called.
 - special methods are generally denoted with `__SOMETHING__`. The constructor is really just a special method
 
 ### Overview
@@ -178,7 +178,7 @@ a.some_method = lambda *args, **kwargs: A.some_method(a, *args, **kwargs)
 a.__init__(10)
 ```
 
-You can't actually run the code above, because `object()` is weridly immutable to the user, but this is still more or less what is going on under the hood.
+You can't actually run the code above, because `object()` is immutable to the user, but this is still more or less what is going on under the hood.
 
 ### Special Methods
 
@@ -252,6 +252,64 @@ a = list(reversed([0, 1, 2])) # [2, 1, 0]
 ```
 
 ## Exceptions
+
+To raise an exception, you simply use the `raise` keyword, followed by an instance from an exception object (any object that inherits from `BaseException`):
+
+```python
+raise Exception("Some message!")
+```
+
+If something raises an exception, you can catch it using a try/except:
+
+```python
+try:
+    raise Exception()
+except Exception as e:
+    print(f"This is the exception object! {e}")
+```
+
+You can use the `raise` keyword by itself in order to re-raise an exception from an except clause:
+
+```python
+try:
+    raise Exception()
+except Exception as e:
+    print(f"This is the exception object! {e}")
+    raise # still raises the exception
+```
+
+You can also raise a new exception "from" the old exception, so that both exceptions get logged:
+
+```python
+try:
+    raise Exception()
+except Exception as e:
+    print(f"This is the exception object! {e}")
+    newException = Exception("Special message")
+    raise newException from ex
+```
+
+You can also use multiple except clauses:
+
+```python
+try:
+    raise Exception()
+except RuntimeError as e: # RuntimeError is a subclass of Exception
+    print("Twas a runtime error") # doesn't run
+except Exception as e:
+    print("Twasn't a runtime error") # does run
+```
+
+The `finally` keyword allows you to run a piece of code even if the portion in the `try` errors;
+
+```python
+try:
+    raise Exception()
+finally:
+    print("A")
+```
+
+The exception is raised after the `finally` clause finishes.
 
 ## Data Types
 
