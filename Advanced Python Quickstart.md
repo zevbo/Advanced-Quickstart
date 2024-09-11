@@ -19,7 +19,7 @@ Variables are both defined and mutated with the `=` operator. Note that this can
 ```python
 var1 = 0 # doesn't exist yet, so definition
 def a():
-    print(f"{var1 = }")
+    print(var1)
 var1 = 1 # already exists in same scope, so it will set
 a() # prints 1
 def b():
@@ -50,6 +50,7 @@ new_var = 10
 def bloop():
     print(new_var) # this fails! Because it's referencing the new_var declared on the next line
     new_var = 4
+bloop()
 ```
 
 ## Functions
@@ -62,7 +63,7 @@ In python, functions are first class values. They can be passed around and set l
 def b():
     return 0
 def c():
-    print(f"{b}")
+    print(b)
 b = 10
 c()
 ```
