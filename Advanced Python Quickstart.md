@@ -4,7 +4,7 @@ Python is an interpreted, dynamically typed (aka: untyped) language. It's streng
 
 ## Data Representation
 
-Because it is interpreted and untyped, all values in Python are runtime-inspectable.
+Because it is untyped, all values in Python are runtime-inspectable.
 
 ## Variables
 
