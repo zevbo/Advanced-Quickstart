@@ -313,6 +313,35 @@ The exception is raised after the `finally` clause finishes.
 
 ## Data Types
 
+Lists are the basic data type in Python (implemented as arraylists):
+
+```python
+a = [] # empty list
+b = [0, 10, 20] # list with something
+b.append(30) # b is now [0, 10, 20, 30]
+b.exetend([4, 2]) # b is now [0, 10, 20, 30, 4, 2]
+for v in b:
+    print(v) # will print the elements of b in order
+```
+
+The other commonly used list methods are: `clear`, `copy`, `insert`, `pop`, `remove`, `sort`, and `reverse`. All of these (except `copy`) change the list in place.
+
+Dictionaries (aka HashMaps) are used like so:
+
+```python
+a = {} # empty dictionary
+b = {"key1": 0, "key2": "anything can have any type", 5: False}
+c["key1"] # 0
+c["fdsjkdfsj"] # throws an exception
+"key1" in c # True
+for key in b: # by default iterates through the keys
+    ...
+for value in b.values():
+    ...
+for key, value in b.items(): # allows you to iterate through keys + values
+    ...
+```
+
 ## Context Managers
 
 ## Type Hints
