@@ -53,6 +53,28 @@ def bloop():
 bloop()
 ```
 
+## Type Hints
+
+While Python is by default untyped, it supported "type hints." Type hints allow you to write in types for variables and functions, which another program (not the Python interpreter--most commonly Mypy) can use to type check your code. This gives you a significant amount of the safety that statically typed programming languages give you, though it isn't close to sound, so there is still a real disadvantage.
+
+Another important note is that the external type checkers generally implement signifcant _type inference_. This means you mostly rarely need to type variables, and mostly just need to type functions. Here are some examples:
+
+```python
+var1: int = 1 # Syntax for typing a variable, but not necessary as type checker will iner
+var2 = 2
+a = "1" + var1 # Type checker will flag this line, can't add string an integer
+a = "2" + var2 # Type checker will flag this line, because it has inerred var2 as an int
+
+def sum_int_float(v1: int, v2: float) -> float:
+    return v1 + v2 # this passes!
+
+def print_sum(msg: str, v1: int, v2: float) -> None:
+    print(f"{msg}: {sum_int_float(v1, v2)}") # This line is fine
+    print(f"{msg}: {sum_int_float(v2, v1)}") # This line fails, because you can't cast a float to an int
+```
+
+Because you have to integerate with untyped code, Python allows you to use the `Any` keyword. All types are subtypes of `Any` (this makes sense), but in addition, `Any` is considred a subtype of every other subtype. This allows soundness to be broken pretty easily, but it is necessary so that you can tell the type checker to "trust you" about untyped code you are integrating with. This is where a Python's type hinting system loses a lot of robustness, but the convenience is a serious benefit.
+
 ## Functions
 
 ### First-class
@@ -197,6 +219,77 @@ len(a) # returns 0
 ```
 
 [Here](https://www.pythonlikeyoumeanit.com/Module4_OOP/Special_Methods.html) is a decent list of special methods. For my money, the most important ones are: `__len__, __str__, __repr__, __getitem__, __setitem__`.
+
+### Default Fields
+
+You can explicitly write default fields outside of methods. Note that these are not static fields shared across a class. Rather, the field is attached to an object at construction, with the given value as a default.
+
+```python
+class A:
+    b = 0
+    def __init__(self):
+        print(b)
+        self.c = 0
+
+a1 = A()
+a2 = A()
+print(a1.b) # 0
+a1.b = 1
+print(a1.b) # 1
+print(a2.b) # 0
+```
+
+### Inheritance
+
+Below is the syntax for inheritance in Python:
+
+```python
+class A:
+    def __init__(self, v):
+        self.v = v
+
+    def a_method(self):
+        return self.v * 2
+
+class B(A): # B inherits from A
+
+    def __init__(self, v1, v2):
+        super().__init__(v1)
+        self.v2 = v2
+
+    def b_method(self):
+        return self.v2 / 2
+```
+
+### Abstract Classes & Class Decorators
+
+There are a number of features that are clearly missing: for instance abstract and static methods. These are generally implemented using decorators. Let's start with abstract classes, with the following example:
+
+```python
+from abc import ABC, abstractmethod # standards for abstract class
+
+class A(ABC):
+
+    def __init__(self, name):
+        self.name = name
+
+    @abstractmethod
+    def get_value(self):
+        ...
+
+    def print_value(self):
+        print(f"value for {self.name}: {self.get_value()}")
+```
+
+You can also use the `@staticmethod` decorator to create a static method, and a `@classmethod`, if you want it abstracted over the class.
+
+```python
+class B:
+
+    def __init__(self, v1, v2):
+        self.v1 = v2
+        self.v2 = v2
+```
 
 ## Iterators
 
@@ -344,8 +437,6 @@ for key, value in b.items(): # allows you to iterate through keys + values
 
 ## Context Managers
 
-## Type Hints
-
 ## Parallelism
 
 ### Processes
@@ -357,3 +448,5 @@ for key, value in b.items(): # allows you to iterate through keys + values
 ## Numpy
 
 ## Dataclasses
+
+## Protocol (structural inheritance)
