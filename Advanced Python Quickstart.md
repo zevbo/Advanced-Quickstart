@@ -75,6 +75,50 @@ def print_sum(msg: str, v1: int, v2: float) -> None:
 
 Because you have to integerate with untyped code, Python allows you to use the `Any` keyword. All types are subtypes of `Any` (this makes sense), but in addition, `Any` is considred a subtype of every other subtype. This allows soundness to be broken pretty easily, but it is necessary so that you can tell the type checker to "trust you" about untyped code you are integrating with. This is where a Python's type hinting system loses a lot of robustness, but the convenience is a serious benefit.
 
+You can both cast a type, or tell the type checker to ignore a line with a comment:
+
+```python
+from typing import cast
+a = 0
+b: str = a # Fails
+c: str = cast(str, a) # Passes
+d: str = a # type: ignore -- the "type: ignore" is read by the type checker, and so it won't flag this line
+```
+
+For generic types, you can use square brackets (note that the syntax is slightly different before 3.10). And you can use `...` to signify there can be any number of that type:
+
+```python
+def sum_plus_tuple_sum(l: list[float], tup: tuple[float, float]) -> tuple[float, float]:
+    return (sum(l), tup[0] + tup[1])
+
+def alternating_sum_tuple(tup: tuple[float, ...]) -> float:
+    s = 0
+    for i, v in enumerate(tup): # this syntax is described later on
+        sign = 1 if i % 2 == 0 else -1 # ternary
+        s += v * sign
+    return s
+```
+
+Other examples of constructs that can be typed like this are `dict[KeyType, ValType]` and `set[Type]`. Python also allows "union" types, meaning a value could be of type A or of type B. Union types can be expressed using `Union` or more commonly with `|`:
+
+```python
+def first_if_not_empty(l: list[int]) -> int | None:
+    if len(l) == 0:
+        return None
+    else:
+        return l[0]
+```
+
+### TypeVar
+
+TypeVars are how you do generic in Python. They are used for classes (as described later on), but can also be used for functions.
+
+```python
+T = TypeVar("T")
+def last(l: list[T]) -> T:
+    return l[-1]
+```
+
 ## Functions
 
 ### First-class
